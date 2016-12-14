@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <title>Flying Marcopolo</title>
+            {{plinemap.js}}
+    </head>
+    <body>
+        <h2>Flying Marcopolo</h2>
+
+        {{ plinemap.html }}
+
+        <form style="padding-top:30px;" method="POST" action="/plan">
+            <input type="submit" value="Become a Marcopolo!"></p>
+            <select name="mode" style="width:70px">
+                <option value=1>Global</option>
+                <option value=2>USA</option>
+                <option value=3>Euroasia</option>
+                <option value=4>Holiday</option>
+            </select>
+        </form>
+
+    </body>
+</html>
