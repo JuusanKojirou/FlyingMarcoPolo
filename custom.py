@@ -16,7 +16,7 @@ def haversine(lat1,lon1,lat2,lon2):
     r = 6371 
     return c * r 
 
-def custom_route(city_list=["Beijing","New York","Paris","Delhi"]):
+def custom_route(city_list='Beijing,New York,Paris,Delhi'):
 	capital=["Abidjan","Abu Dhabi","Abuja","Accra","Addis Ababa","Amman","Amsterdam","Antananarivo","Asmara","Asuncion","Athens","Auckland","Baghdad","Bahrain","Baku","Bamako","Bandar Seri Begawan","Bangkok","Bangui","Beijing","Beirut","Belgrade","Berlin","Bern","Bishkek","Bogota","Bratislava","Bridgetown","Brussels","Bucharest","Budapest","Buenos Aires","Bujumbura","Cairo","Caracas","Castries","Cayenne","Chisinau","Conakry","Copenhagen","Dakar","Dar Es Salaam","Delhi","Dhaka","Dili","Djibouti","Doha","Dushanbe","Freetown","Georgetown","Hanoi","Harare","Havana","Helsinki","Honiara","Islamabad","Istanbul","Jakarta","Johannesburg","Juba","Kabul","Kathmandu","Keflavik","Khartoum","Kiev","Kigali","Kingston","Kuala Lumpur","Kuwait","Libreville","Lilongwe","Lima","Lisbon","Ljubljana","Lome","London","Luanda","Lusaka","Madrid","Malabo","Male","Managua","Manila","Maputo","Mexico City","Mogadishu","Monrovia","Montevideo","Moroni","Moscow","Muscat","N'djamena","Nairobi","Nassau","New York","Niamey","Nice","Nicosia","Oslo","Ottawa","Ouagadougou","Panama City","Paris","Phnom-penh","Podgorica","Port Moresby","Port-au-prince","Prague","Quito","Rabat","Riga","Rio De Janeiro","Riyadh","Rome","San Jose","San Juan","San Salvador","Santiago","Santo Domingo","Sao Tome","Sarajevo","Seoul","Singapore","Sofia","Stockholm","Sydney","Taipei","Tashkent","Tbilisi","Tegucigalpa","Tehran","Thimphu","Tirana","Tokyo","Tripoli","Tunis","Vienna","Vientiane","Vilnius","Warsaw","Yaounde","Yerevan","Zagreb"]
 	
 
@@ -31,6 +31,9 @@ def custom_route(city_list=["Beijing","New York","Paris","Delhi"]):
 	di=int(sqrt(len(result)))
 	db.close()
 
+	city_list=city_list.split(',')
+
+	
 	dic=len(city_list)
 	city_list_index=numpy.zeros(dic)-1
 	for i in range(0,dic):
@@ -38,6 +41,9 @@ def custom_route(city_list=["Beijing","New York","Paris","Delhi"]):
 			if city_list[i]==capital[j]:
 				city_list_index[int(i)]=int(j)
 	
+	for i in range(0,dic):
+		if city_list_index[i]==-1:
+			return [],[],"Sorry, you might input an imaginal city %s" % (city_list[i])
 
 	g={}
 	for i in city_list_index:
@@ -75,7 +81,7 @@ def custom_route(city_list=["Beijing","New York","Paris","Delhi"]):
 	path.append((result[route[0]][6],result[route[0]][7]))
 	return path,pathmarker,output
 		
-#path,pathmarker,output=costum()
+#path,pathmarker,output=custom_route()
 
 		
 
