@@ -14,12 +14,10 @@ import abc
 
 
 def round_figures(x, n):
-    """Returns x rounded to n significant figures."""
     return round(x, int(n - math.ceil(math.log10(abs(x)))))
 
 
 def time_string(seconds):
-    """Returns time in seconds as a string formatted HHHH:MM:SS."""
     s = int(round(seconds))  # round to nearest second
     h, s = divmod(s, 3600)   # get hours and remainder
     m, s = divmod(s, 60)     # split remainder into minutes and seconds
@@ -27,11 +25,6 @@ def time_string(seconds):
 
 
 class Annealer(object):
-
-    """Performs simulated annealing by calling functions to calculate
-    energy and make moves on a state.  The temperature schedule for
-    annealing may be provided manually or estimated automatically.
-    """
 
     __metaclass__ = abc.ABCMeta
     Tmax = 10000.0
@@ -64,34 +57,22 @@ class Annealer(object):
 
     @abc.abstractmethod
     def move(self):
-        """Create a state change"""
         pass
 
     @abc.abstractmethod
     def energy(self):
-        """Calculate state's energy"""
         pass
 
     def set_user_exit(self, signum, frame):
-        """Raises the user_exit flag, further iterations are stopped
-        """
         self.user_exit = True
 
     def set_schedule(self, schedule):
-        """Takes the output from `auto` and sets the attributes
-        """
         self.Tmax = schedule['tmax']
         self.Tmin = schedule['tmin']
         self.steps = int(schedule['steps'])
 
     def copy_state(self, state):
-        """Returns an exact copy of the provided state
-        Implemented according to self.copy_strategy, one of
 
-        * deepcopy : use copy.deepcopy (slow but reliable)
-        * slice: use list slices (faster but only works if state is list-like)
-        * method: use the state's copy() method
-        """
         if self.copy_strategy == 'deepcopy':
             return copy.deepcopy(state)
         elif self.copy_strategy == 'slice':
@@ -100,23 +81,7 @@ class Annealer(object):
             return state.copy()
 
     def update(self, step, T, E, acceptance, improvement):
-        """Prints the current temperature, energy, acceptance rate,
-        improvement rate, elapsed time, and remaining time.
 
-        The acceptance rate indicates the percentage of moves since the last
-        update that were accepted by the Metropolis algorithm.  It includes
-        moves that decreased the energy, moves that left the energy
-        unchanged, and moves that increased the energy yet were reached by
-        thermal excitation.
-
-        The improvement rate indicates the percentage of moves since the
-        last update that strictly decreased the energy.  At high
-        temperatures it will include both moves that improved the overall
-        state and moves that simply undid previously accepted moves that
-        increased the energy by thermal excititation.  At low temperatures
-        it will tend toward zero as the moves that can decrease the energy
-        are exhausted and moves that would increase the energy are no longer
-        thermally accessible."""
 
         elapsed = time.time() - self.start
         if step == 0:
@@ -132,14 +97,7 @@ class Annealer(object):
             sys.stdout.flush()
 
     def anneal(self):
-        """Minimizes the energy of a system by simulated annealing.
 
-        Parameters
-        state : an initial arrangement of the system
-
-        Returns
-        (state, energy): the best state and energy found.
-        """
         step = 0
         self.start = time.time()
 
@@ -199,19 +157,10 @@ class Annealer(object):
         return bestState, bestEnergy
 
     def auto(self, minutes, steps=2000):
-        """Minimizes the energy of a system by simulated annealing with
-        automatic selection of the temperature schedule.
 
-        Keyword arguments:
-        state -- an initial arrangement of the system
-        minutes -- time to spend annealing (after exploring temperatures)
-        steps -- number of steps to spend on each stage of exploration
-
-        Returns the best state and energy found."""
 
         def run(T, steps):
-            """Anneals a system at constant temperature and returns the state,
-            energy, rate of acceptance, and rate of improvement."""
+
             E = self.energy()
             prevState = self.copy_state(self.state)
             prevEnergy = E
